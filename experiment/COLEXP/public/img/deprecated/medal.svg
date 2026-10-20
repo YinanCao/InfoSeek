@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 144 144" style="enable-background:new 0 0 144 144;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#0056D3;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#D10050;}
+</style>
+<g id="leftStrap">
+	<polygon class="st0" points="66.7,84.6 42.7,35.6 46.5,32.7 70.4,81.7 	"/>
+	<polygon class="st1" points="62.9,87.5 39,38.5 42.7,35.6 66.7,84.6 	"/>
+	<polygon class="st2" points="59.2,90.5 35.2,41.4 39,38.5 62.9,87.5 	"/>
+</g>
+<g id="rightStrap">
+	<polygon class="st0" points="77.3,84.6 101.3,35.6 97.5,32.7 73.6,81.7 	"/>
+	<polygon class="st1" points="81.1,87.5 105,38.5 101.3,35.6 77.3,84.6 	"/>
+	<polygon class="st2" points="84.8,90.5 108.8,41.4 105,38.5 81.1,87.5 	"/>
+</g>
+<circle id="outerring" cx="72" cy="104.6" r="21.6"/>
+<circle id="inner" cx="72" cy="104.6" r="20.1"/>
+</svg>

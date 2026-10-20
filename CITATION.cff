@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use these data or this code, please cite the paper below."
+title: "InfoSeek: data and code for 'Humans use a dual policy to improve inferences during epistemic information seeking'"
+authors:
+  - family-names: Cao
+    given-names: Yinan
+  - family-names: Alméras
+    given-names: Clémence
+  - family-names: Lee
+    given-names: Junseok K.
+  - family-names: Maye
+    given-names: Inès
+  - family-names: Wyart
+    given-names: Valentin
+repository-code: "https://github.com/YinanCao/InfoSeek"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Humans use a dual policy to improve inferences during epistemic information seeking"
+  authors:
+    - family-names: Cao
+      given-names: Yinan
+    - family-names: Alméras
+      given-names: Clémence
+    - family-names: Lee
+      given-names: Junseok K.
+    - family-names: Maye
+      given-names: Inès
+    - family-names: Wyart
+      given-names: Valentin
+  journal: "Nature Human Behaviour"
+  year: 2026

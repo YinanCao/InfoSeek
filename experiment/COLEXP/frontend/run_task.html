@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>COLEXP - Task</title>
+
+    <!-- Import external functions and plugins-->
+    <script src ="jquery/jquery-3.6.0.js"></script>
+    <script src ="jspsych-6.3.0/jspsych.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-fullscreen.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-external-html.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-html-keyboard-response-min-duration.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-instructions.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src ="jspsych-6.3.0/plugins/jspsych-survey-likert.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-slider-response.js"></script>
+    <link href ="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+
+    <!-- Import experiment functions-->
+    <script type="module" src="exec_task.js"></script>
+
+  </head>
+  <body>
+    <style>
+      body {
+        overflow: hidden;
+        height: 100%;
+        min-height: 100%;
+        max-height: 100%;
+      }
+    </style>
+
+  </body>
+
+  <script type="module">
+    import exec_task from './exec_task.js'
+    import {constants} from './modules/global_constants.js';
+
+    // get query parameters
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const pid = urlParams.get('pid');
+    
+    /* 1. Task execution */
+    $(window).on("load", function() {
+      // get task data
+      $.ajax({
+        url: '/get_task_data',
+        type: 'POST',
+        data: {pid: pid},
+        // success: console.log('POSTed: get_task_data!'),
+      })
+      .done((data) => {
+        const pass_task_data = new Promise((resolve, reject) => {
+          // get data from server
+          const task_data = {
+            constants: constants,
+            uid: data.unique_id,
+            sid: data.subj_id,
+            data: data.data,
+            trainData: data.trainData,
+            finishCode: data.finishCode,
+          };
+          resolve(task_data);
+        });
+        pass_task_data.then((task_data) => {
+          setTimeout(() => {
+            exec_task(task_data);
+          }, 2000);
+        });
+      })
+      .fail(data => {
+        console.log(data);
+        alert(data.responseJSON.error);
+      });
+    });
+    
+  </script>
+  
+</html>
