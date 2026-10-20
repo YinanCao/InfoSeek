@@ -3,8 +3,12 @@ clear; clc; close all;
 dataset = 'COLINEternary';
 
 load(['dat_choicestbl_',dataset,'.mat'],'choicestbl');
-choicestbl(choicestbl.excludepart == true,:) = [];
+choicestbl(choicestbl.excludepart_possible == true,:) = [];
 data = choicestbl;
+
+% Sex/Age: Prolific profile data lost for a few participants -> NaN (not 0)
+sexnum = @(x) double(string(x)=="Female") + 0./double(ismember(string(x),["Female","Male"]));
+agenum = @(x) str2double(string(x));
 
 unique_ids = unique(data.subj);
 nsubj = numel(unique_ids);
@@ -33,7 +37,7 @@ for s = 1:nsubj
         taskVARS = [T.subj,T.blk,T.seq,T.condition,T.symmetry,...
             T.counterfactual,T.targetcolor,T.nsamples,latent];
 
-        tmp{s,seq} = [repmat([taskVARS,guessRESP,T.Sex=='Female',T.Age],nsmp,1),sampling];
+        tmp{s,seq} = [repmat([taskVARS,guessRESP,sexnum(T.Sex),agenum(T.Age)],nsmp,1),sampling];
     end
 end
 tmp = tmp';
@@ -48,18 +52,18 @@ varNames = {...
 
 allTable = array2table(allData,'VariableNames',varNames);
 
-allTable.subj = uint16(allTable.subj);
+allTable.subj = castchk(allTable.subj, 'uint16');
 
-allTable.blk = uint8(allTable.blk);
-allTable.seq = uint8(allTable.seq);
-allTable.condition = uint8(allTable.condition);
-allTable.symmetry = uint8(allTable.symmetry);
-allTable.counterfactual = uint8(allTable.counterfactual);
-allTable.targetcolor = uint8(allTable.targetcolor);
-allTable.nsamples = uint8(allTable.nsamples);
-allTable.latent1 = int8(allTable.latent1);
-allTable.latent2 = int8(allTable.latent2);
-allTable.latent3 = int8(allTable.latent3);
+allTable.blk = castchk(allTable.blk, 'uint8');
+allTable.seq = castchk(allTable.seq, 'uint8');
+allTable.condition = castchk(allTable.condition, 'uint8');
+allTable.symmetry = castchk(allTable.symmetry, 'uint8');
+allTable.counterfactual = castchk(allTable.counterfactual, 'uint8');
+allTable.targetcolor = castchk(allTable.targetcolor, 'uint8');
+allTable.nsamples = castchk(allTable.nsamples, 'uint8');
+allTable.latent1 = castchk(allTable.latent1, 'int8');
+allTable.latent2 = castchk(allTable.latent2, 'int8');
+allTable.latent3 = castchk(allTable.latent3, 'int8');
 
 allTable.finalchoicecorr = single(allTable.finalchoicecorr);
 allTable.finalchoicert = single(allTable.finalchoicert);
@@ -70,13 +74,20 @@ allTable.coloroption3 = single(allTable.coloroption3);
 allTable.colorseen1 = single(allTable.colorseen1);
 allTable.colorseen2 = single(allTable.colorseen2);
 allTable.colorseen3 = single(allTable.colorseen3);
-allTable.choices = uint8(allTable.choices);
+allTable.choices(allTable.choices==0) = NaN;   % 0 marked a missing response; keep it as NaN
+allTable.choices = single(allTable.choices);
 allTable.choicesrt = single(allTable.choicesrt);
 
-allTable.female = uint8(allTable.female);
-allTable.age = uint8(allTable.age);
+allTable.female = single(allTable.female);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.age = single(allTable.age);   % keep NaN for missing values (an integer cast would turn NaN into 0)
 
 % save(['dat_sampling_',dataset,'.mat'],'allTable','-v7.3');
 writetable(allTable,['dat_sampling_',dataset,'.csv']);
 
 disp('all done')
+
+function y = castchk(x, cls)
+% Cast to an integer class, but refuse if x contains NaN (MATLAB would silently turn NaN into 0).
+assert(~any(isnan(x(:))), 'castchk: NaN found; casting to %s would turn it into 0.', cls);
+y = cast(x, cls);
+end

@@ -132,7 +132,7 @@ Main online study (**N = 420**; participants excluded from the analyses are not 
 - `finalchoicert`: final-probe response time (ms)
 - `coloroption1`, `coloroption2`: color shade that option 1 and option 2 would show on this choice (8 shades from `-1` = most blue to `+1` = most orange)
 - `colorseen1`, `colorseen2`: color shade seen on this choice (empty for the option not chosen)
-- `choices`: sampled option (`1` = option 1, `2` = option 2); options do **not** correspond to spatial sides. `0` marks a missing response; games with a missing response are excluded from the analyses
+- `choices`: sampled option (`1` = option 1, `2` = option 2); options do **not** correspond to spatial sides. Empty (NaN) marks a missing response; games with a missing response are excluded from the analyses
 - `choicesrt`: choice response time (ms)
 - `big5_extraversion`, `big5_agreeableness`, `big5_conscientiousness`, `big5_negativeemotionality`, `big5_openmindedness`: Big Five personality domain scores
 - `icar`: ICAR cognitive ability score
@@ -140,11 +140,11 @@ Main online study (**N = 420**; participants excluded from the analyses are not 
 - `female`: `1` = female, `0` = otherwise
 - `age`: age in years
 
-Questionnaire and cognitive scores are unavailable (coded `0`) for participants who did not complete the corresponding measures.
+Missing values are empty (NaN), not 0. This applies to the questionnaire and cognitive scores (`big5_*`, `icar`, `nfcs`) of participants who did not complete them, and to `female` and `age` of participants whose profile data were lost (2 participants in this file).
 
 ### `data/raw/dat_sampling_COLINEternary.csv`
 
-Ternary-choice online study (Supplementary Fig. 3). The file contains 250 participants; 7 of them (`subj` 8, 41, 84, 128, 192, 208 and 244) are excluded from the analyses, which leaves **N = 243**.
+Ternary-choice online study (Supplementary Fig. 3). The file contains the **N = 243** participants included in the analyses. `female` and `age` are empty (NaN) for the participant whose profile data were lost.
 
 - `condition`: `1` = match, `2` = guess
 - `symmetry`: number of bags with blue as the dominant color (0 to 3)
@@ -164,7 +164,7 @@ Laboratory replication study with novel stimuli (**N = 39**; Supplementary Fig. 
 - `nsamples`: number of choices in the game (8, 14 or 20)
 - `latent1`, `latent2`: true dominant color of each option (`-1` = blue bag, `+1` = orange bag)
 - `finalchoicecorr1`, `finalchoicecorr2`, `finalchoicert1`, `finalchoicert2`: correctness and response time of the two final-probe answers
-- Other columns as in the main study.
+- Other columns as in the main study, except that this file has no `female`, `age`, Big Five, `icar` or `nfcs` columns (the participants' sex and age are reported in the paper only).
 
 ### `data/raw/dat_sampling_COLcued.csv`
 
@@ -176,7 +176,7 @@ Cued-sampling online study (guess condition only; Fig. 7e to h). 150 participant
 - `latent1`, `latent2`: true dominant color of each option (`-1` = blue bag, `+1` = orange bag)
 - `finalchoicecorr1`, `finalchoicecorr2`, `finalchoicert1`, `finalchoicert2`: correctness and response time of the two final-probe answers
 - `choices`: sampled option (`1` = option 1, `2` = option 2); options do **not** correspond to spatial sides
-- Other columns as in the main study.
+- Other columns as in the main study, except that this file has no questionnaire columns (`big5_*`, `icar`, `nfcs`). `female` and `age` are as in the main study.
 
 ### `data/derived/*.mat`
 

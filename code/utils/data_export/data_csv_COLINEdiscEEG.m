@@ -50,19 +50,19 @@ varNames = {...
     };
 allTable = array2table(allData,'VariableNames',varNames);
 
-allTable.subj = uint16(allTable.subj);
+allTable.subj = castchk(allTable.subj, 'uint16');
 
-allTable.blk = uint8(allTable.blk);
-allTable.seq = uint8(allTable.seq);
-allTable.condition = uint8(allTable.condition);
-allTable.symmetry = uint8(allTable.symmetry);
-allTable.twinid = uint8(allTable.twinid);
-allTable.targetcolor = uint8(allTable.targetcolor);
-allTable.nsamples = uint8(allTable.nsamples);
-allTable.mirroring = uint8(allTable.mirroring);
+allTable.blk = castchk(allTable.blk, 'uint8');
+allTable.seq = castchk(allTable.seq, 'uint8');
+allTable.condition = castchk(allTable.condition, 'uint8');
+allTable.symmetry = castchk(allTable.symmetry, 'uint8');
+allTable.twinid = castchk(allTable.twinid, 'uint8');
+allTable.targetcolor = castchk(allTable.targetcolor, 'uint8');
+allTable.nsamples = castchk(allTable.nsamples, 'uint8');
+allTable.mirroring = castchk(allTable.mirroring, 'uint8');
 
-% allTable.finalchoicecorr1 = uint8(allTable.finalchoicecorr1);
-% allTable.finalchoicecorr2 = uint8(allTable.finalchoicecorr2);
+% allTable.finalchoicecorr1 = castchk(allTable.finalchoicecorr1, 'uint8');
+% allTable.finalchoicecorr2 = castchk(allTable.finalchoicecorr2, 'uint8');
 allTable.finalchoicert1 = single(allTable.finalchoicert1);
 allTable.finalchoicert2 = single(allTable.finalchoicert2);
  
@@ -70,9 +70,16 @@ allTable.coloroption1 = single(allTable.coloroption1);
 allTable.colorseen1 = single(allTable.colorseen1);
 allTable.coloroption2 = single(allTable.coloroption2);
 allTable.colorseen2 = single(allTable.colorseen2);
-allTable.choices = uint8(allTable.choices);
+allTable.choices(allTable.choices==0) = NaN;   % 0 marked a missing response; keep it as NaN
+allTable.choices = single(allTable.choices);
 allTable.choicesrt = single(allTable.choicesrt);
 
 writetable(allTable,['dat_sampling_',dataset,'.csv']);
 
 disp('all done')
+
+function y = castchk(x, cls)
+% Cast to an integer class, but refuse if x contains NaN (MATLAB would silently turn NaN into 0).
+assert(~any(isnan(x(:))), 'castchk: NaN found; casting to %s would turn it into 0.', cls);
+y = cast(x, cls);
+end

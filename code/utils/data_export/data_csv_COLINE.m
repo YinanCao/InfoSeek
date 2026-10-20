@@ -72,16 +72,16 @@ varNames = {...
 
 allTable = array2table(allData,'VariableNames',varNames);
 
-allTable.subj = uint16(allTable.subj);
+allTable.subj = castchk(allTable.subj, 'uint16');
 
-allTable.blk = uint8(allTable.blk);
-allTable.seq = uint8(allTable.seq);
-allTable.condition = uint8(allTable.condition);
-allTable.symmetry = uint8(allTable.symmetry);
-allTable.counterfactual = uint8(allTable.counterfactual);
-allTable.targetcolor = uint8(allTable.targetcolor);
-allTable.nsamples = uint8(allTable.nsamples);
-allTable.mirroring = uint8(allTable.mirroring);
+allTable.blk = castchk(allTable.blk, 'uint8');
+allTable.seq = castchk(allTable.seq, 'uint8');
+allTable.condition = castchk(allTable.condition, 'uint8');
+allTable.symmetry = castchk(allTable.symmetry, 'uint8');
+allTable.counterfactual = castchk(allTable.counterfactual, 'uint8');
+allTable.targetcolor = castchk(allTable.targetcolor, 'uint8');
+allTable.nsamples = castchk(allTable.nsamples, 'uint8');
+allTable.mirroring = castchk(allTable.mirroring, 'uint8');
 
 allTable.finalchoicecorr = single(allTable.finalchoicecorr);
 allTable.finalchoicert = single(allTable.finalchoicert);
@@ -90,21 +90,28 @@ allTable.coloroption1 = single(allTable.coloroption1);
 allTable.colorseen1 = single(allTable.colorseen1);
 allTable.coloroption2 = single(allTable.coloroption2);
 allTable.colorseen2 = single(allTable.colorseen2);
-allTable.choices = uint8(allTable.choices);
+allTable.choices(allTable.choices==0) = NaN;   % 0 marked a missing response; keep it as NaN
+allTable.choices = single(allTable.choices);
 allTable.choicesrt = single(allTable.choicesrt);
 
-allTable.big5_extraversion = uint8(allTable.big5_extraversion);
-allTable.big5_agreeableness = uint8(allTable.big5_agreeableness);
-allTable.big5_conscientiousness = uint8(allTable.big5_conscientiousness);
-allTable.big5_negativeemotionality = uint8(allTable.big5_negativeemotionality);
-allTable.big5_openmindedness = uint8(allTable.big5_openmindedness);
-allTable.icar = uint8(allTable.icar);
-allTable.nfcs = uint16(allTable.nfcs);
+allTable.big5_extraversion = single(allTable.big5_extraversion);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.big5_agreeableness = single(allTable.big5_agreeableness);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.big5_conscientiousness = single(allTable.big5_conscientiousness);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.big5_negativeemotionality = single(allTable.big5_negativeemotionality);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.big5_openmindedness = single(allTable.big5_openmindedness);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.icar = single(allTable.icar);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.nfcs = single(allTable.nfcs);   % keep NaN for missing values (an integer cast would turn NaN into 0)
 
-allTable.female = uint8(allTable.female);
-allTable.age = uint8(allTable.age);
+allTable.female = single(allTable.female);   % keep NaN for missing values (an integer cast would turn NaN into 0)
+allTable.age = single(allTable.age);   % keep NaN for missing values (an integer cast would turn NaN into 0)
 
 % save(['dat_sampling_',dataset,'.mat'],'allTable','-v7.3');
 writetable(allTable,['dat_sampling_',dataset,'.csv']);
 
 disp('all done')
+
+function y = castchk(x, cls)
+% Cast to an integer class, but refuse if x contains NaN (MATLAB would silently turn NaN into 0).
+assert(~any(isnan(x(:))), 'castchk: NaN found; casting to %s would turn it into 0.', cls);
+y = cast(x, cls);
+end
